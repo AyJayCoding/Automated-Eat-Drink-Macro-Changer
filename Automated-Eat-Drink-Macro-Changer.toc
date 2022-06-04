@@ -1,0 +1,6 @@
+## Interface: 90205
+## Version: 1.0
+## Title: Automated Eat Drink Macro Changer
+## Author: AyJayCoding
+## Notes: Updates the items to eat/drink for regenerating health/mana based on items added to/already in bag
+code.lua
