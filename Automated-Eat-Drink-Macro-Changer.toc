@@ -3,4 +3,6 @@
 ## Title: Automated Eat Drink Macro Changer
 ## Author: AyJayCoding
 ## Notes: Updates the items to eat/drink for regenerating health/mana based on items added to/already in bag
+## X-Curse-Project-ID: 630548
+## X-Wago-ID: 9rN41d6D
 code.lua
