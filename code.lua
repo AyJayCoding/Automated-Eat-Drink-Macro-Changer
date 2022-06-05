@@ -1,4 +1,4 @@
--- This file is loaded from "AutomatedEatDrinkMacroChanger.toc"
+-- This file is loaded from "Automated-Eat-Drink-Macro-Changer.toc"
 do
 	-- Setting up tables: 
 	
