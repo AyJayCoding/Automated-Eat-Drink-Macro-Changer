@@ -3,6 +3,10 @@ do
 	-- Setting up tables: 
 	
 	local noBuffFoodAndDrinkItems = {
+	-- Breakfast of Draconic Champions
+	197763,
+	-- Sweet and Sour Clam Chowder
+	197762,
 	-- Catalyzed Apple Pie
 	190880,
 	-- Circle of Subsistence
@@ -15,12 +19,24 @@ do
 	172046};
 
 	local noBuffFoodItems = {
+	-- Mackerel Snackerel
+	197760,
+	-- Cheese and Quackers
+	197759,
+	-- Probably Protein
+	197761,
+	-- Twice-Baked Potato
+	197758,
 	-- Tenebrous Truffle
 	178550,
 	-- Bonemeal Bread
 	186725};
 
 	local drinkItems = {
+	-- Delicious Dragon Spittle
+	197771,
+	-- Churnbelly Tea
+	197772,
 	-- Restorative Flow
 	190936,
 	-- Shadespring Water
@@ -33,6 +49,8 @@ do
 	186704};
 
 	local critBuffItems = {
+	-- Filet of Fangs
+	197779,
 	-- Infused Endmire Fruit
 	182592, 
 	-- Spinefin Souffle and Fries
@@ -41,31 +59,87 @@ do
 	172040};
 
 	local masteryBuffItems = {
+	-- Salt-Baled Fishcake
+	197781,
 	-- Iridescent Ravioli with Apple Sauce
 	172049,
 	-- Meaty Apple Dumplings
 	172048};
 
 	local versaBuffItems = {
+	-- Seamoth Surprise
+	197780,
 	-- Steak a la Mode
 	172051,
 	-- Sweet Silvergill Sausages
 	172050};
 
 	local hasteBuffItems = {
+	-- Timely Demise
+	197778,
 	-- Tenebrous Crown Roast Aspic
 	172045,
 	-- Cinnamon Bonefish Stew
 	172044};
 
 	local staminaBuffItems = {
+	-- Salted Meat Mash
+	197791,
+	-- Hopefully Healthy
+	197777,
 	-- Banana Beef Pudding
 	172069,
 	-- Pickleed Meat Smoothie
 	172068};
+	
+	local critHasteBuffItems = {
+	-- Feisty Fish Sticks
+	197782};
+	
+	local critMasteryBuffItems = {
+	-- Thousandbone Tongueslicer
+	197786};
+	
+	local critVersaBuffItems = {
+	-- Revenge, Served Cold
+	197785};
+	
+	local hasteMasteryBuffItems = {
+	-- Sizzling Seafood Medley
+	197784};
+	
+	local hasteVersaBuffItems = {
+	-- Aromatic Seafood Platter
+	197783};
+	
+	local masteryVersaBuffItems = {
+	-- Great Cerulean Sea
+	197787};
+	
+	local strengthBuffItems = {
+	-- Braised Bruffalon Brisket
+	197788,
+	-- Charred HoprnswogSteaks
+	197774};
+
+	local agilityBuffItems = {
+	-- Riverside Picnic
+	197789,
+	-- Scrambled Basilisk Eggs
+	197775};
+
+	local intellectBuffItems = {
+	-- Roast Duck Delight
+	197790,
+	-- Thrice-Spiced Mammoth Kabob
+	197776};
 
 	local conjuredFoodAndDrinkItems = {113509, 80618, 80610, 65517, 65516, 65515, 65500, 65499, 43523, 43518, 34062};
 	local conjuredItems = false;
+	
+	local strengthStatId = 1;
+	local agilityStatId = 2;
+	local intellectStatID = 4;
 
 	-- Setting up string for console output
 	local AEDMADDON_CHAT_TITLE = "|CFF9482C9Automated Eat/Drink Macro Changer:|r "
@@ -117,15 +191,19 @@ do
 		
 		if updateMacroNow == true then
 --				print(string.format("%sUpdating macro",AEDMADDON_CHAT_TITLE));
-			local macroStr;
+			local macroStr, macroStr2;
 			
 			local numMacros = GetNumMacros();
 			local foundMacro = false;
+			local foundMacro2 = false;
 	
 			for i=1, numMacros do
 				local name = GetMacroInfo(i)
 				if name == "AEDMbutton" then
 					foundMacro = true;
+				end		
+				if name == "AEDMbutton2" then
+					foundMacro2 = true;
 				end		
 			end
 			macroStr = "#showtooltip\n/use ";
@@ -182,14 +260,84 @@ do
 				macroStr = macroStr.."item:"..findFoodItems(noBuffFoodAndDrinkItems, false)..";";			
 			end
 
+
+			macroStr2 = "#showtooltip\n/use ";
+			
+			-- Modifier alt+ctrl+shift
+--			macroStr2 = macroStr2.."[mod:altctrlshift]";
+
+			-- Modifier alt+ctrl
+			macroStr2 = macroStr2.."[mod:altctrl]";
+
+			-- Mastery + Versatility food
+			macroStr2 = macroStr2.."item:"..findFoodItems(masteryVersaBuffItems, false)..";";
+
+			-- Modifier alt+shift
+			macroStr2 = macroStr2.."[mod:altshift]";
+
+			-- Haste + Versatility food
+			macroStr2 = macroStr2.."item:"..findFoodItems(hasteVersaBuffItems, false)..";";
+
+			-- Modifier ctrl+shift
+			macroStr2 = macroStr2.."[mod:ctrlshift]";
+
+			-- Haste + Mastery food
+			macroStr2 = macroStr2.."item:"..findFoodItems(hasteMasteryBuffItems, false)..";";
+
+			-- Modifier alt
+			macroStr2 = macroStr2.."[mod:alt]";
+
+			-- Crit + Versatility food
+			macroStr2 = macroStr2.."item:"..findFoodItems(critVersaBuffItems, false)..";";
+
+			-- Modifier ctrl
+			macroStr2 = macroStr2.."[mod:ctrl]";
+
+			-- Crit + Mastery Food
+			macroStr2 = macroStr2.."item:"..findFoodItems(critMasteryBuffItems, false)..";";
+
+			-- Modifier shift
+			macroStr2 = macroStr2.."[mod:shift]";
+
+			-- Crit + Haste food
+			macroStr2 = macroStr2.."item:"..findFoodItems(critHasteBuffItems, false)..";";			
+
+			local strength = UnitStat("player",strengthStatId);
+			local agility = UnitStat("player",agilityStatId);
+			local intellect = UnitStat("player",intellectStatID);
+			
+			if (strength > agility and strength > intellect) then -- Check for strength as primary stat
+				-- Strength Stat food
+				macroStr2 = macroStr2.."item:"..findFoodItems(strengthBuffItems, false)..";";
+			else if (agility > strength and agility > intellect) then -- Check for Agility as primary stat
+				-- Agility Stat food
+				macroStr2 = macroStr2.."item:"..findFoodItems(agilityBuffItems, false)..";";
+			else if (intellect > strength and intellect > agility) then -- Check for Intellect as primary stat
+				-- Intellect Stat food
+				macroStr2 = macroStr2.."item:"..findFoodItems(intellectBuffItems, false)..";";
+			else -- Default to no buff food and drink items
+				macroStr2 = macroStr2.."item:"..findFoodItems(noBuffFoodAndDrinkItems, false)..";";			
+			end
+			
+
 			if foundMacro == true then
 				EditMacro("AEDMbutton", "AEDMbutton", nil, macroStr, 1, nil);
 			else
-				print(string.format("%sExisitng macro for automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
+				print(string.format("%sExisitng macro for basic automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
 				if numMacros < MAX_ACCOUNT_MACROS then
 					CreateMacro("AEDMbutton", "INV_MISC_QUESTIONMARK", macroStr, nil);
 				else
-					print(string.format("%sCould not create macro for automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
+					print(string.format("%sCould not create macro for basic automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
+				end
+			end
+			if foundMacro2 == true then
+				EditMacro("AEDMbutton2", "AEDMbutton2", nil, macroStr2, 1, nil);
+			else
+				print(string.format("%sExisitng macro for extended automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
+				if numMacros < MAX_ACCOUNT_MACROS then
+					CreateMacro("AEDMbutton2", "INV_MISC_QUESTIONMARK", macroStr2, nil);
+				else
+					print(string.format("%sCould not create macro for extended automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
 				end
 			end
 			updateMacroLater = false;			
