@@ -202,10 +202,11 @@ do
 				if name == "AEDMbutton" then
 					foundMacro = true;
 				end		
-				if name == "AEDMbutton2" then
+				if name == "AEDMextbutton" then
 					foundMacro2 = true;
 				end		
 			end
+			
 			macroStr = "#showtooltip\n/use ";
 			
 			-- Modifier alt+ctrl+shift
@@ -259,7 +260,6 @@ do
 --				print(string.format("%sUpdating non-conjured item",AEDMADDON_CHAT_TITLE));
 				macroStr = macroStr.."item:"..findFoodItems(noBuffFoodAndDrinkItems, false)..";";			
 			end
-
 
 			macroStr2 = "#showtooltip\n/use ";
 			
@@ -318,7 +318,9 @@ do
 			else -- Default to no buff food and drink items
 				macroStr2 = macroStr2.."item:"..findFoodItems(noBuffFoodAndDrinkItems, false)..";";			
 			end
+			print(string.format("%sMacro2 "..macroStr2,AEDMADDON_CHAT_TITLE));
 			
+			local macrosCreated = 0;
 
 			if foundMacro == true then
 				EditMacro("AEDMbutton", "AEDMbutton", nil, macroStr, 1, nil);
@@ -326,16 +328,18 @@ do
 				print(string.format("%sExisitng macro for basic automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
 				if numMacros < MAX_ACCOUNT_MACROS then
 					CreateMacro("AEDMbutton", "INV_MISC_QUESTIONMARK", macroStr, nil);
+					macrosCreated += 1; 
 				else
 					print(string.format("%sCould not create macro for basic automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
 				end
 			end
+			
 			if foundMacro2 == true then
-				EditMacro("AEDMbutton2", "AEDMbutton2", nil, macroStr2, 1, nil);
+				EditMacro("AEDMextbutton", "AEDMextbutton", nil, macroStr2, 1, nil);
 			else
 				print(string.format("%sExisitng macro for extended automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
-				if numMacros < MAX_ACCOUNT_MACROS then
-					CreateMacro("AEDMbutton2", "INV_MISC_QUESTIONMARK", macroStr2, nil);
+				if (numMacros+macrosCreated) < MAX_ACCOUNT_MACROS then
+					CreateMacro("AEDMextbutton", "INV_MISC_QUESTIONMARK", macroStr2, nil);
 				else
 					print(string.format("%sCould not create macro for extended automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
 				end
