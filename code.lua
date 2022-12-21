@@ -134,12 +134,13 @@ do
 	-- Thrice-Spiced Mammoth Kabob
 	197776};
 
+
 	local conjuredFoodAndDrinkItems = {113509, 80618, 80610, 65517, 65516, 65515, 65500, 65499, 43523, 43518, 34062};
 	local conjuredItems = false;
-	
+
 	local strengthStatId = 1;
 	local agilityStatId = 2;
-	local intellectStatID = 4;
+	local intellectStatId = 4;
 
 	-- Setting up string for console output
 	local AEDMADDON_CHAT_TITLE = "|CFF9482C9Automated Eat/Drink Macro Changer:|r "
@@ -191,22 +192,21 @@ do
 		
 		if updateMacroNow == true then
 --				print(string.format("%sUpdating macro",AEDMADDON_CHAT_TITLE));
-			local macroStr, macroStr2;
+			local macroStr;
+			local macroStr2;
 			
 			local numMacros = GetNumMacros();
 			local foundMacro = false;
-			local foundMacro2 = false;
+			local foundExtendedMacro = false;
 	
 			for i=1, numMacros do
 				local name = GetMacroInfo(i)
 				if name == "AEDMbutton" then
 					foundMacro = true;
-				end		
-				if name == "AEDMextbutton" then
-					foundMacro2 = true;
+				elseif name == "AEDMextbutton" then
+					foundExtendedMacro = true;
 				end		
 			end
-			
 			macroStr = "#showtooltip\n/use ";
 			
 			-- Modifier alt+ctrl+shift
@@ -302,39 +302,38 @@ do
 			-- Crit + Haste food
 			macroStr2 = macroStr2.."item:"..findFoodItems(critHasteBuffItems, false)..";";			
 
-			local strength = UnitStat("player",strengthStatId);
-			local agility = UnitStat("player",agilityStatId);
-			local intellect = UnitStat("player",intellectStatID);
-			
-			if (strength > agility and strength > intellect) then -- Check for strength as primary stat
+			local strengthBaseValue = UnitStat("player",strengthStatId);
+			local agilityBaseValue = UnitStat("player",agilityStatId);
+			local intellectBaseValue = UnitStat("player",intellectStatId);
+
+			if (strengthBaseValue > agilityBaseValue and strengthBaseValue > intellectBaseValue) then -- Check for strength as primary stat
 				-- Strength Stat food
 				macroStr2 = macroStr2.."item:"..findFoodItems(strengthBuffItems, false)..";";
-			else if (agility > strength and agility > intellect) then -- Check for Agility as primary stat
+			elseif (agilityBaseValue > strengthBaseValue and agilityBaseValue > intellectBaseValue) then -- Check for Agility as primary stat
 				-- Agility Stat food
 				macroStr2 = macroStr2.."item:"..findFoodItems(agilityBuffItems, false)..";";
-			else if (intellect > strength and intellect > agility) then -- Check for Intellect as primary stat
+			elseif (intellectBaseValue > strengthBaseValue and intellectBaseValue > agilityBaseValue) then -- Check for Intellect as primary stat
 				-- Intellect Stat food
 				macroStr2 = macroStr2.."item:"..findFoodItems(intellectBuffItems, false)..";";
 			else -- Default to no buff food and drink items
 				macroStr2 = macroStr2.."item:"..findFoodItems(noBuffFoodAndDrinkItems, false)..";";			
 			end
-			print(string.format("%sMacro2 "..macroStr2,AEDMADDON_CHAT_TITLE));
 			
 			local macrosCreated = 0;
 
 			if foundMacro == true then
 				EditMacro("AEDMbutton", "AEDMbutton", nil, macroStr, 1, nil);
 			else
-				print(string.format("%sExisitng macro for basic automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
+				print(string.format("%sExisitng macro for automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
 				if numMacros < MAX_ACCOUNT_MACROS then
 					CreateMacro("AEDMbutton", "INV_MISC_QUESTIONMARK", macroStr, nil);
-					macrosCreated += 1; 
+					macrosCreated = macrosCreated + 1; 
 				else
-					print(string.format("%sCould not create macro for basic automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
+					print(string.format("%sCould not create macro for automated eat/drink. Macro limit reached.",AEDMADDON_CHAT_TITLE));
 				end
 			end
 			
-			if foundMacro2 == true then
+			if foundExtendedMacro == true then
 				EditMacro("AEDMextbutton", "AEDMextbutton", nil, macroStr2, 1, nil);
 			else
 				print(string.format("%sExisitng macro for extended automated eat/drink not found. Creating new one...",AEDMADDON_CHAT_TITLE));
